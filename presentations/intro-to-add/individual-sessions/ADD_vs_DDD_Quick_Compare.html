@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADD vs DDD - Quick Compare</title>
+    <style>
+        :root { --grad-start: #6d28d9; --grad-end: #dc2626; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; font-family: "Segoe UI", Roboto, sans-serif; background: #f6f7f8; color: #374151; }
+        .wrapper { display: flex; height: 100%; }
+        .content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .box { border: 6px solid transparent; padding: 2rem 3rem; background: linear-gradient(#f6f7f8, #f6f7f8) padding-box, linear-gradient(90deg, var(--grad-start), var(--grad-end)) border-box; width: 100%; max-width: 900px; }
+        h1 { font-size: 2.5rem; font-weight: 700; text-align: center; background: linear-gradient(90deg, var(--grad-start), var(--grad-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        th, td { padding: 0.5rem 0.75rem; text-align: center; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f0f1f3; font-weight: 600; }
+        .controls { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; }
+        .btn { background: #222; color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .slide { display: none; }
+        .slide.active { display: block; }
+        .progress { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--grad-start), var(--grad-end)); transition: width 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="progress" id="progress"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <div class="wrapper">
+            <div class="content">
+                <div class="box">
+                    <h1>ADD vs DDD<br/>Quick Compare</h1>
+                    <div style="text-align: center; font-size: 1.5rem; margin-top: 2rem;">
+                        <p>🚀 30-minute comparison</p>
+                        <p>📊 Data-driven analysis</p>
+                        <p>🎯 AI-era perspective</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Scorecard -->
+    <div class="slide">
+        <div class="wrapper">
+            <div class="content">
+                <div class="box">
+                    <h1>ADD V3 vs DDD<br/>Độ phù hợp AI & Chất lượng dự án</h1>
+                    <table>
+                        <tr>
+                            <th>Phương pháp</th>
+                            <th>Điểm AI Fit</th>
+                            <th>Điểm Quality</th>
+                            <th>Điểm tổng</th>
+                        </tr>
+                        <tr>
+                            <td><strong>ADD V3</strong></td>
+                            <td>8.6</td>
+                            <td>8.0</td>
+                            <td><strong>8.3</strong></td>
+                        </tr>
+                        <tr>
+                            <td>DDD</td>
+                            <td>6.0</td>
+                            <td>5.8</td>
+                            <td>5.9</td>
+                        </tr>
+                    </table>
+                    <div style="font-size: 1.4rem; font-weight: 600; text-align: center;">
+                        Theo bạn, phương pháp nào phù hợp hơn cho dự án AI-driven?
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Key Differences -->
+    <div class="slide">
+        <div class="wrapper">
+            <div class="content">
+                <div class="box">
+                    <h1>Key Differences</h1>
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>DDD</th>
+                            <th>ADD</th>
+                        </tr>
+                        <tr>
+                            <td>Learning Curve</td>
+                            <td>Steep, complex patterns</td>
+                            <td>Gentle, 5 simple actors</td>
+                        </tr>
+                        <tr>
+                            <td>AI Compatibility</td>
+                            <td>Not designed for AI</td>
+                            <td>AI-first design</td>
+                        </tr>
+                        <tr>
+                            <td>Tech Swapping</td>
+                            <td>Domain model changes</td>
+                            <td>Zero business impact</td>
+                        </tr>
+                        <tr>
+                            <td>Architecture Drift</td>
+                            <td>High risk</td>
+                            <td>Protected by layers</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Migration Path -->
+    <div class="slide">
+        <div class="wrapper">
+            <div class="content">
+                <div class="box">
+                    <h1>DDD → ADD Migration</h1>
+                    <div style="font-size: 1.3rem; line-height: 2; text-align: left;">
+                        <p><strong>1. Bounded Context → Scope Module</strong></p>
+                        <p><strong>2. Domain Services → Extract Ports</strong></p>
+                        <p><strong>3. Aggregates → Thin Entities + RuleSets</strong></p>
+                        <p><strong>4. Infrastructure → Implementations</strong></p>
+                        <br/>
+                        <p style="text-align: center; color: var(--grad-end); font-weight: 600;">
+                            🎯 Straightforward migration path!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevSlide()">← Prev</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            progress.style.width = ((currentSlide + 1) / slides.length * 100) + '%';
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

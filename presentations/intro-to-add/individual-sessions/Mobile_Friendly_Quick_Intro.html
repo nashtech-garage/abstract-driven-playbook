@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADD Quick Intro - Mobile Friendly</title>
+    <style>
+        :root {
+            --grad-start: #6d28d9;
+            --grad-end: #dc2626;
+            --accent: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #fff;
+            color: #374151;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        /* Mobile-first responsive design */
+        .container {
+            padding: 1rem;
+            height: calc(100% - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 6vw, 3rem);
+            color: var(--accent);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: var(--grad-start);
+            margin: 1rem 0;
+        }
+
+        .content {
+            max-width: 90%;
+            width: 100%;
+        }
+
+        ul {
+            list-style: none;
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            line-height: 1.6;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        ul li {
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul li::before {
+            content: "•";
+            color: var(--accent);
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Mobile-optimized controls */
+        .mobile-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(90deg, var(--grad-start), var(--grad-end));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 80px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover,
+        .nav-btn:active {
+            background: rgba(255,255,255,0.3);
+            transform: scale(0.95);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-info {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        /* Progress indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            z-index: 11;
+        }
+
+        /* Touch-friendly tap areas */
+        .tap-area {
+            position: fixed;
+            top: 60px;
+            bottom: 60px;
+            width: 25%;
+            z-index: 5;
+            background: transparent;
+        }
+
+        .tap-area.left {
+            left: 0;
+        }
+
+        .tap-area.right {
+            right: 0;
+        }
+
+        /* Visual feedback for taps */
+        .tap-feedback {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(109, 40, 217, 0.3);
+            pointer-events: none;
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        .tap-feedback.animate {
+            transform: scale(1);
+        }
+
+        /* Responsive text sizing */
+        .code-block {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            margin: 1rem 0;
+            overflow-x: auto;
+            text-align: left;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fff3cd 0%, #fff3cd 100%);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* Landscape mode adjustments */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .container { padding: 0.5rem; }
+            h1 { font-size: clamp(1.2rem, 5vw, 2.5rem); margin-bottom: 0.5rem; }
+            ul li { margin: 0.5rem 0; }
+        }
+
+        /* Larger tablets and desktop */
+        @media (min-width: 768px) {
+            .container { padding: 2rem; }
+            .tap-area { display: none; }
+            .mobile-controls {
+                height: 70px;
+                padding: 0 2rem;
+            }
+            .nav-btn {
+                padding: 14px 24px;
+                font-size: 18px;
+                min-width: 100px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body { background: #1a1a1a; color: #e5e7eb; }
+            .code-block { background: #2d3748; color: #e2e8f0; }
+            .highlight { background: rgba(251, 191, 36, 0.3); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Touch Areas for Navigation -->
+    <div class="tap-area left" id="leftTap"></div>
+    <div class="tap-area right" id="rightTap"></div>
+    <div class="tap-feedback" id="tapFeedback"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <div class="container">
+            <div class="content">
+                <h1>Abstract Driven Development</h1>
+                <h2>Quick Mobile Intro</h2>
+                <ul>
+                    <li>🎯 <strong>5-minute overview</strong></li>
+                    <li>📱 <strong>Mobile-optimized</strong></li>
+                    <li>🚀 <strong>AI-era architecture</strong></li>
+                </ul>
+                <p style="margin-top: 2rem; font-style: italic; color: #666;">
+                    Swipe or tap to navigate →
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Problem -->
+    <div class="slide">
+        <div class="container">
+            <div class="content">
+                <h1>The Problem</h1>
+                <ul>
+                    <li><strong>AI generates code fast</strong><br/>But often creates architectural mess</li>
+                    <li><strong>Business + Technology coupling</strong><br/>Hard to change, test, and maintain</li>
+                    <li><strong>Traditional patterns</strong><br/>Too complex for AI generation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: The ADD Solution -->
+    <div class="slide">
+        <div class="container">
+            <div class="content">
+                <h1>The ADD Solution</h1>
+                <h2>Golden Rule</h2>
+                <ul>
+                    <li><span class="highlight">Absolute separation</span> between <strong>WHAT</strong> (business) and <strong>HOW</strong> (technology)</li>
+                    <li><strong>Business depends only on interfaces</strong></li>
+                    <li><strong>Technology wired via DI</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: 5 Actors -->
+    <div class="slide">
+        <div class="container">
+            <div class="content">
+                <h1>The 5 Actors</h1>
+                <ul>
+                    <li><strong>Boundary:</strong> External contracts (APIs)</li>
+                    <li><strong>Core:</strong> Business vocabulary</li>
+                    <li><strong>Operators:</strong> Business logic</li>
+                    <li><strong>Implementations:</strong> Technology</li>
+                    <li><strong>Bootstrap:</strong> Wiring everything</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Benefits -->
+    <div class="slide">
+        <div class="container">
+            <div class="content">
+                <h1>Benefits</h1>
+                <ul>
+                    <li><strong>🔄 Easy tech swaps</strong><br/>Change DB without touching business</li>
+                    <li><strong>🤖 AI-friendly</strong><br/>Clear interfaces guide AI generation</li>
+                    <li><strong>⚡ Fast testing</strong><br/>Business logic isolated from infrastructure</li>
+                    <li><strong>🎯 Clean architecture</strong><br/>Even when AI generates code</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Getting Started -->
+    <div class="slide">
+        <div class="container">
+            <div class="content">
+                <h1>Getting Started</h1>
+                <div class="code-block">
+1. Create 5 folders
+2. Define interfaces first
+3. Implement business logic
+4. Add technology adapters
+5. Wire with DI
+                </div>
+                <p style="margin-top: 1.5rem; font-weight: 600; color: var(--accent);">
+                    Start simple, evolve as needed
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Controls -->
+    <div class="mobile-controls">
+        <button class="nav-btn" id="prevBtn">← Prev</button>
+        <div class="progress-info" id="progressInfo">1 / 6</div>
+        <button class="nav-btn" id="nextBtn">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressBar = document.getElementById('progressBar');
+        const progressInfo = document.getElementById('progressInfo');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const leftTap = document.getElementById('leftTap');
+        const rightTap = document.getElementById('rightTap');
+        const tapFeedback = document.getElementById('tapFeedback');
+
+        function showSlide(n) {
+            // Hide current slide
+            slides[currentSlide].classList.remove('active');
+
+            // Calculate new slide index
+            currentSlide = Math.max(0, Math.min(n, totalSlides - 1));
+
+            // Show new slide
+            slides[currentSlide].classList.add('active');
+
+            // Update progress
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+            progressInfo.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function showTapFeedback(x, y) {
+            tapFeedback.style.left = (x - 25) + 'px';
+            tapFeedback.style.top = (y - 25) + 'px';
+            tapFeedback.classList.add('animate');
+            setTimeout(() => {
+                tapFeedback.classList.remove('animate');
+            }, 200);
+        }
+
+        // Button event listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Touch/tap navigation
+        leftTap.addEventListener('click', (e) => {
+            showTapFeedback(e.clientX, e.clientY);
+            prevSlide();
+        });
+
+        rightTap.addEventListener('click', (e) => {
+            showTapFeedback(e.clientX, e.clientY);
+            nextSlide();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'Backspace':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    showSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    showSlide(totalSlides - 1);
+                    break;
+            }
+        });
+
+        // Swipe gestures for mobile
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            endY = e.changedTouches[0].clientY;
+
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const minSwipeDistance = 50;
+
+            // Only register horizontal swipes
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+                if (deltaX > 0) {
+                    // Swipe right (previous slide)
+                    prevSlide();
+                } else {
+                    // Swipe left (next slide)
+                    nextSlide();
+                }
+            }
+        }, { passive: true });
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Initialize
+        showSlide(0);
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            // Force layout recalculation after orientation change
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+    </script>
+</body>
+</html>
